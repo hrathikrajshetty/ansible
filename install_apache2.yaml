@@ -4,19 +4,20 @@
   become: true
   tasks:
     
-    - name: update repository index
+    - name: install apache2 and php package for Debian
       apt:
+        name: 
+          - apache2
+          - php
+        state: latest
         update_cache: true
       when: ansible_distribution == "Debian"
 
-    - name: install apache2 package
-      apt:
-        name: apache2
-        state: latest
-      when: ansible_distribution == "Debian"
-
-    - name: install apache2 package
+    - name: install apache2 and php package for RedHat
       dnf:
-        name: httpd
+        name: 
+          - httpd
+          - php
         state: latest
+        update_cache: true
       when: ansible_distribution == "RedHat"
