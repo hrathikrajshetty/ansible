@@ -22,6 +22,28 @@
         update_cache: true
       when: ansible_distribution == "RedHat"
 
+    - name: start httpd (RedHat)
+      tags: apache,apache2, httpd
+      service:
+        name: httpd
+        state: started
+        enabled: true
+      when: ansible_distribution == "RedHat"
+   
+    - name: change email address for admin in a conf file
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regex: '^ServerAdmin'
+        line: ServerAdmin someone-new@nowhere.net
+      when: ansible_distribution == "RedHat"
+      register: httpd
+
+    - name: restart httpd service
+      service:
+        name: httpd
+        state: restarted
+      when: httpd.changed 
+
     - name: copy default html site for apache site
       tags: apache,apache2,httpd
       copy:
@@ -31,7 +53,7 @@
         group: root
         mode: 0644
 
-- hosts: workstation
+- hosts: workstation2
   become: true
   tasks:
 
