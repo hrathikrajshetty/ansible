@@ -21,3 +21,12 @@
         state: latest
         update_cache: true
       when: ansible_distribution == "RedHat"
+
+    - name: copy default html site for apache site
+      tags: apache,apache2,httpd
+      copy:
+        src: default_site.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
